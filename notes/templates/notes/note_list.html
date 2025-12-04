@@ -1,0 +1,56 @@
+{% extends 'notes/base.html' %}
+{% load static %}
+
+{% block title %}All Notes - Sticky Notes{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>My Sticky Notes</h1>
+    <p class="note-count">Total Notes: <span class="badge">{{ total_notes }}</span></p>
+</div>
+
+{% if notes %}
+    <div class="notes-grid">
+        {% for note in notes %}
+            <div class="note-card">
+                <div class="note-card-header">
+                    <h3 class="note-title">
+                        <a href="{% url 'note_detail' note.pk %}">{{ note.title }}</a>
+                    </h3>
+                </div>
+                <div class="note-card-body">
+                    <p class="note-preview">
+                        {{ note.content|truncatewords:20 }}
+                    </p>
+                </div>
+                <div class="note-card-footer">
+                    <div class="note-meta">
+                        <small class="text-muted">
+                            {{ note.updated_at|date:"M d, Y" }}
+                        </small>
+                    </div>
+                    <div class="note-actions">
+                        <a href="{% url 'note_detail' note.pk %}" class="btn btn-sm btn-view" title="View">
+                            View
+                        </a>
+                        <a href="{% url 'note_update' note.pk %}" class="btn btn-sm btn-edit" title="Edit">
+                            Edit
+                        </a>
+                        <a href="{% url 'note_delete' note.pk %}" class="btn btn-sm btn-delete" title="Delete">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h2>No notes yet!</h2>
+        <p>Create your first sticky note to get started.</p>
+        <a href="{% url 'note_create' %}" class="btn btn-primary btn-lg">
+            + Create Your First Note
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

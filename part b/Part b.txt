@@ -1,0 +1,26 @@
+ Question 1: 
+
+  HTTP itself doesn't remember anything between requests - it's stateless. So when you log into a website, the next page you visit wouldn't know you're
+  logged in. That's where sessions and cookies come in. When you first visit a site, the server creates a session ID (like a unique ticket number) and
+  sends it to your browser as a cookie. Your browser saves this cookie and sends it back with every request. The server uses that session ID to look up
+  your information - whether you're logged in, what's in your shopping cart, etc.
+
+  In Django, this happens automatically through middleware. The session data is stored server-side (usually in the database or cache), while only the
+  session ID lives in the cookie on your browser. This is more secure than storing everything in cookies because sensitive data stays on the server.
+  Django also uses CSRF tokens to prevent malicious sites from making requests on your behalf. For authentication, Django checks if your session has a
+  user ID attached to it. If it does, you're logged in. This is how websites "remember" you even though HTTP doesn't.
+
+
+
+Question 2:
+
+  Moving a Django app from SQLite to MariaDB takes a few steps. First, you need to install MariaDB on your server and create a database. Then you need
+  to install the Python connector - usually mysqlclient using pip. Next, you edit the DATABASES setting in settings.py, changing from SQLite to MariaDB
+  with your database name, username, password, host, and port.
+
+  Once that's configured, you run python manage.py makemigrations to create migration files based on your models, then python manage.py migrate to apply
+  them to MariaDB. The main difference from SQLite is that MariaDB is a proper database server, so you need credentials and it runs separately. You
+  might run into issues with character encoding - setting it to utf8mb4 is recommended. Also, MariaDB handles some field types differently than SQLite,
+  so you might need to adjust certain model fields. It's good practice to test migrations on a development database first before running them on
+  production. You can also use python manage.py dumpdata to export data from SQLite and loaddata to import it into MariaDB if you're migrating existing
+  data.

@@ -1,0 +1,72 @@
+{% extends 'notes/base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} Note - Sticky Notes{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-header">
+        <h1>{{ action }} Note</h1>
+        <a href="{% if note %}{% url 'note_detail' note.pk %}{% else %}{% url 'note_list' %}{% endif %}" class="back-link">
+            ← Cancel
+        </a>
+    </div>
+
+    <div class="form-card">
+        <form method="post" class="note-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}" class="form-label">
+                    {{ form.title.label }}
+                    {% if form.title.field.required %}
+                        <span class="required">*</span>
+                    {% endif %}
+                </label>
+                {{ form.title }}
+                {% if form.title.help_text %}
+                    <small class="form-help">{{ form.title.help_text }}</small>
+                {% endif %}
+                {% if form.title.errors %}
+                    <div class="form-errors">
+                        {{ form.title.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.content.id_for_label }}" class="form-label">
+                    {{ form.content.label }}
+                    {% if form.content.field.required %}
+                        <span class="required">*</span>
+                    {% endif %}
+                </label>
+                {{ form.content }}
+                {% if form.content.help_text %}
+                    <small class="form-help">{{ form.content.help_text }}</small>
+                {% endif %}
+                {% if form.content.errors %}
+                    <div class="form-errors">
+                        {{ form.content.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    {{ action }} Note
+                </button>
+                <a href="{% if note %}{% url 'note_detail' note.pk %}{% else %}{% url 'note_list' %}{% endif %}" class="btn btn-secondary btn-lg">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
